@@ -79,7 +79,7 @@
       box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
     }
 
-    /* 기타 입력 */
+    /* 기타 입력 박스 */
     .etc-input-box {
       margin-top: 12px;
       padding: 14px;
@@ -134,7 +134,20 @@
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
     }
     button.submit-btn:hover { background: #4f46e5; }
-    button.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    button.submit-btn:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: white;
+      color: #475569;
+      font-weight: 600;
+      padding: 11px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: #f1f5f9; }
 
     .hidden { display: none !important; }
 
@@ -210,7 +223,7 @@
 
       <div class="form-group">
         <label for="studentName">이름 *</label>
-        <input type="text" id="studentName" placeholder="예: 김선화" required>
+        <input type="text" id="studentName" placeholder="예: 김선화">
       </div>
 
       <div class="form-group">
@@ -218,20 +231,20 @@
         <div class="phone-box">
           <input type="text" class="phone-prefix" value="010" readonly disabled>
           <span class="phone-divider">-</span>
-          <input type="tel" id="phoneMid" maxlength="4" placeholder="1234" inputmode="numeric" required>
+          <input type="tel" id="phoneMid" maxlength="4" placeholder="1234" inputmode="numeric">
           <span class="phone-divider">-</span>
-          <input type="tel" id="phoneEnd" maxlength="4" placeholder="5678" inputmode="numeric" required>
+          <input type="tel" id="phoneEnd" maxlength="4" placeholder="5678" inputmode="numeric">
         </div>
       </div>
 
       <div class="form-group">
         <label for="studentSchool">현재 다니는 중학교 *</label>
-        <input type="text" id="studentSchool" placeholder="예: 영천여자중학교 3학년" required>
+        <input type="text" id="studentSchool" placeholder="예: 영천여자중학교 3학년">
       </div>
 
       <div class="form-group">
         <label for="studentInsta">인스타그램 아이디 (@) *</label>
-        <input type="text" id="studentInsta" placeholder="예: @seonhwa_star (DM 이벤트 당첨 알림용)" required>
+        <input type="text" id="studentInsta" placeholder="예: @seonhwa_star (DM 이벤트 당첨 알림용)">
       </div>
 
       <div class="form-group">
@@ -245,7 +258,7 @@
       </div>
 
       <div style="margin-top: 20px;">
-        <button class="submit-btn" id="submitBtn" disabled>이벤트 응모 완료 ✨</button>
+        <button class="submit-btn" id="submitBtn">이벤트 응모 완료 ✨</button>
       </div>
     </section>
   </div>
@@ -262,8 +275,9 @@
         <div id="matchSummary" style="font-size: 14px; color: #334155; line-height: 1.6;"></div>
       </div>
 
-      <div style="margin-top: 24px;">
+      <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
         <a href="https://www.instagram.com" target="_blank" rel="noopener" style="display:inline-block; background: linear-gradient(135deg, #ec4899, #f43f5e); color: white; padding: 12px 24px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 14px;">선화여고 공식 인스타그램 바로가기 ↗</a>
+        <button class="btn-secondary" id="restartBtn">처음부터 다시 작성하기 🔄</button>
       </div>
     </div>
   </div>
@@ -279,12 +293,12 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // [수정완료] 전달해주신 최신 Google Apps Script 웹 앱 배포 URL
+  // 구글 스프레드시트 Apps Script 배포 URL
   const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrF5MotcTb1nAP5H38QD3FxKevFbqYYFtsxZimsaiiphAG6qd1NK5IyHZl6WlgeAhp/exec';
 
   let selectedCriteria = [];
 
-  // 카드 선택 로직
+  // 카드 선택 핸들러
   document.querySelectorAll('.tile').forEach(tile => {
     tile.addEventListener('click', () => {
       const val = tile.dataset.val;
@@ -300,7 +314,6 @@
       }
 
       updateTilesUI();
-      checkFormValidity();
     });
   });
 
@@ -333,7 +346,7 @@
     $('#count').textContent = selectedCriteria.length;
   }
 
-  // 전화번호 자동 포커스
+  // 전화번호 4자리 자동 포커스
   const phoneMid = $('#phoneMid');
   const phoneEnd = $('#phoneEnd');
 
@@ -343,30 +356,56 @@
       if (input === phoneMid && input.value.length === 4) {
         phoneEnd.focus();
       }
-      checkFormValidity();
     });
   });
 
-  // 유효성 검사
-  const textInputs = ['#studentName', '#studentSchool', '#studentInsta', '#etcText'];
-  textInputs.forEach(sel => $(sel).addEventListener('input', checkFormValidity));
+  // 유효성 검사 및 오류 안내 함수
+  function validateForm() {
+    if (selectedCriteria.length < 3) {
+      alert(`고등학교 선택 기준을 3가지 순서대로 골라주세요! (현재 ${selectedCriteria.length}개 선택됨)`);
+      window.scrollTo({ top: $('#criteriaGrid').offsetTop - 60, behavior: 'smooth' });
+      return false;
+    }
 
-  function checkFormValidity() {
-    const isCriteriaCountValid = selectedCriteria.length === 3;
-    const hasEtc = selectedCriteria.includes('기타');
-    const isEtcTextValid = !hasEtc || $('#etcText').value.trim().length > 0;
+    if (selectedCriteria.includes('기타') && !$('#etcText').value.trim()) {
+      alert('기타 선택 기준 내용을 직접 입력해주세요!');
+      $('#etcText').focus();
+      return false;
+    }
 
-    const isBasicTextValid = $('#studentName').value.trim().length > 0 &&
-                             $('#studentSchool').value.trim().length > 0 &&
-                             $('#studentInsta').value.trim().length > 0;
+    if (!$('#studentName').value.trim()) {
+      alert('이름을 입력해주세요!');
+      $('#studentName').focus();
+      return false;
+    }
 
-    const isPhoneValid = phoneMid.value.length === 4 && phoneEnd.value.length === 4;
+    if (phoneMid.value.length !== 4 || phoneEnd.value.length !== 4) {
+      alert('휴대폰 번호 가운데/끝 4자리를 정확히 입력해주세요!');
+      if (phoneMid.value.length !== 4) phoneMid.focus();
+      else phoneEnd.focus();
+      return false;
+    }
 
-    $('#submitBtn').disabled = !(isCriteriaCountValid && isEtcTextValid && isBasicTextValid && isPhoneValid);
+    if (!$('#studentSchool').value.trim()) {
+      alert('현재 다니는 중학교를 입력해주세요! (예: 영천여중 3학년)');
+      $('#studentSchool').focus();
+      return false;
+    }
+
+    if (!$('#studentInsta').value.trim()) {
+      alert('인스타그램 아이디를 입력해주세요! (DM 당첨 알림용)');
+      $('#studentInsta').focus();
+      return false;
+    }
+
+    return true;
   }
 
-  // 폼 전송 핸들러 (조건문 오류 및 CORS 완벽 수정)
+  // 폼 전송 핸들러
   $('#submitBtn').addEventListener('click', async () => {
+    // 1. 유효성 검사 실행 (누락 시 알림 표시 후 중단)
+    if (!validateForm()) return;
+
     const btn = $('#submitBtn');
     btn.disabled = true;
     btn.textContent = '티켓 발급 및 데이터 전송 중... ⏳';
@@ -387,7 +426,6 @@
     };
 
     try {
-      // 구글 스프레드시트 웹앱으로 전송
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -398,6 +436,9 @@
     } catch (err) {
       console.warn('전송 처리 통과:', err);
       showSuccess(payload);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '이벤트 응모 완료 ✨';
     }
   });
 
@@ -421,6 +462,24 @@
     $('#matchSummary').innerHTML = comment;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  // 새로 작성하기 (초기화) 핸들러
+  $('#restartBtn').addEventListener('click', () => {
+    selectedCriteria = [];
+    updateTilesUI();
+
+    $('#studentName').value = '';
+    phoneMid.value = '';
+    phoneEnd.value = '';
+    $('#studentSchool').value = '';
+    $('#studentInsta').value = '';
+    $('#studentMemo').value = '';
+    $('#etcText').value = '';
+
+    $('#resultSection').classList.add('hidden');
+    $('#surveySection').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 })();
 </script>
 </body>
