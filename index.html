@@ -30,7 +30,7 @@
     }
     .badge { display: inline-block; background: rgba(255,255,255,0.25); padding: 4px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
     h1 { margin: 0 0 8px; font-size: clamp(22px, 4.5vw, 28px); font-weight: 800; }
-    header p { margin: 0; font-size: 14px; opacity: 0.95; }
+    header p { margin: 0; font-size: 14px; opacity: 0.95; line-height: 1.5; }
 
     .card {
       background: white;
@@ -65,7 +65,7 @@
     .tile strong { font-size: 14px; font-weight: 700; color: #1e293b; }
     .tile small { font-size: 11px; color: var(--muted); }
 
-    /* 선택 순위 뱃지 (1순위, 2순위, 3순위) */
+    /* 순위 뱃지 */
     .rank-tag {
       position: absolute;
       top: 8px;
@@ -79,7 +79,7 @@
       box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
     }
 
-    /* 기타 입력 박스 */
+    /* 기타 입력 */
     .etc-input-box {
       margin-top: 12px;
       padding: 14px;
@@ -102,13 +102,13 @@
     }
     .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
     
-    /* 010 전화번호 분할 입력 스타일 */
+    /* 010 전화번호 */
     .phone-box { display: flex; align-items: center; gap: 8px; }
     .phone-box input { text-align: center; font-weight: 600; }
     .phone-prefix { width: 75px !important; background: #f1f5f9; color: #475569; cursor: not-allowed; user-select: none; }
     .phone-divider { color: var(--muted); font-weight: bold; }
 
-    /* 간접적 동의 문구 */
+    /* 안내문 */
     .event-notice {
       background: #f8fafc;
       border: 1px dashed #cbd5e1;
@@ -138,7 +138,7 @@
 
     .hidden { display: none !important; }
 
-    /* 완료 뷰 */
+    /* 완료 화면 */
     .success-box { text-align: center; padding: 30px 20px; background: #fff; border-radius: 20px; border: 1px solid #e2e8f0; }
     .ticket-badge { background: #ec4899; color: white; padding: 4px 12px; border-radius: 99px; font-size: 12px; font-weight: 800; display: inline-block; margin-bottom: 12px; }
     .sunhwa-match-card { background: #fdf2f8; border: 1.5px dashed #f472b6; border-radius: 16px; padding: 16px; text-align: left; margin-top: 20px; }
@@ -152,9 +152,9 @@
     <p>나만의 고교 선택 1·2·3순위 기준을 정하고, <br> 선화여고 럭키 이벤트에 참여해보세요!</p>
   </header>
 
-  <!-- 설문 입력 폼 섹션 -->
+  <!-- 설문 입력 폼 -->
   <div id="surveySection">
-    <!-- STEP 1: 기준 선택 (3개 선택) -->
+    <!-- STEP 1: 기준 선택 -->
     <section class="card">
       <h2>① 내가 고등학교를 고를 때 제일 중요한 기준은? (3개 선택)</h2>
       <p class="muted">중요하게 생각하는 순서대로 <b>3가지</b>를 클릭해주세요. (<span id="count" style="color:var(--primary); font-weight:700;">0</span>/3개 선택)</p>
@@ -190,7 +190,6 @@
           <strong>친절한 선생님과 선배</strong>
           <small>따뜻하고 가족 같은 학교 문화</small>
         </div>
-        <!-- 기타 항목 추가 -->
         <div class="tile" data-val="기타" style="grid-column: span 2;">
           <span>✏️</span>
           <strong>기타 (직접 작성)</strong>
@@ -198,17 +197,16 @@
         </div>
       </div>
 
-      <!-- 기타 선택 시 활성화되는 텍스트 입력창 -->
       <div id="etcBox" class="etc-input-box hidden">
         <label for="etcText" style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">✏️ 기타 선택 기준 직접 입력 *</label>
-        <input type="text" id="etcText" placeholder="예: 대학 진학률, 예체능 맞춤 지원 등">
+        <input type="text" id="etcText" placeholder="예: 높은 대학 진학률, 예체능 지원 등">
       </div>
     </section>
 
-    <!-- STEP 2: 인스타 & 정보 입력 -->
+    <!-- STEP 2: 정보 입력 -->
     <section class="card">
       <h2>② 럭키 이벤트 추첨 & 맞춤 결과 전송 🎁</h2>
-      <p class="muted">선화여고 인스타그램 이벤트 추첨 및 맞춤 고교 진학 꿀팁 리포트 전송을 위해 아래 항목을 작성해주세요.</p>
+      <p class="muted">선화여고 인스타그램 이벤트 추첨 및 맞춤 고교 진학 꿀팁 전송을 위해 아래 항목을 작성해주세요.</p>
 
       <div class="form-group">
         <label for="studentName">이름 *</label>
@@ -252,7 +250,7 @@
     </section>
   </div>
 
-  <!-- 완료 뷰 -->
+  <!-- 완료 화면 -->
   <div id="resultSection" class="hidden">
     <div class="success-box">
       <div class="ticket-badge">SUBMISSION COMPLETED</div>
@@ -281,12 +279,12 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // [주의] 생성한 Apps Script의 웹 앱 배포 URL을 입력하세요.
-  const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+  // [수정완료] 전달해주신 최신 Google Apps Script 웹 앱 배포 URL
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrF5MotcTb1nAP5H38QD3FxKevFbqYYFtsxZimsaiiphAG6qd1NK5IyHZl6WlgeAhp/exec';
 
-  let selectedCriteria = []; // 클릭 순서대로 1순위, 2순위, 3순위 저장
+  let selectedCriteria = [];
 
-  // 카드 선택 로직 (최대 3개, 순위 뱃지 부여)
+  // 카드 선택 로직
   document.querySelectorAll('.tile').forEach(tile => {
     tile.addEventListener('click', () => {
       const val = tile.dataset.val;
@@ -306,7 +304,6 @@
     });
   });
 
-  // 순위 뱃지 및 스타일 동기화
   function updateTilesUI() {
     document.querySelectorAll('.tile').forEach(t => {
       const val = t.dataset.val;
@@ -329,7 +326,6 @@
       }
     });
 
-    // '기타' 선택 여부에 따른 입력창 노출
     const hasEtc = selectedCriteria.includes('기타');
     $('#etcBox').classList.toggle('hidden', !hasEtc);
     if (!hasEtc) $('#etcText').value = '';
@@ -337,7 +333,7 @@
     $('#count').textContent = selectedCriteria.length;
   }
 
-  // 전화번호 숫자만 입력 & 4자리 완료 시 다음 필드 포커스
+  // 전화번호 자동 포커스
   const phoneMid = $('#phoneMid');
   const phoneEnd = $('#phoneEnd');
 
@@ -351,7 +347,7 @@
     });
   });
 
-  // 일반 입력 필드 유효성 감지
+  // 유효성 검사
   const textInputs = ['#studentName', '#studentSchool', '#studentInsta', '#etcText'];
   textInputs.forEach(sel => $(sel).addEventListener('input', checkFormValidity));
 
@@ -369,7 +365,7 @@
     $('#submitBtn').disabled = !(isCriteriaCountValid && isEtcTextValid && isBasicTextValid && isPhoneValid);
   }
 
-  // 폼 전송 핸들러
+  // 폼 전송 핸들러 (조건문 오류 및 CORS 완벽 수정)
   $('#submitBtn').addEventListener('click', async () => {
     const btn = $('#submitBtn');
     btn.disabled = true;
@@ -377,9 +373,7 @@
 
     const fullPhone = `010-${phoneMid.value.trim()}-${phoneEnd.value.trim()}`;
     const etcValue = $('#etcText').value.trim();
-
-    // '기타'를 골랐을 경우 사용자가 작성한 문구로 치환
-    const formatChoice = (val) => val === '기타' ? `기타(${etcValue})` : val;
+    const formatChoice = (val) => (val === '기타' ? `기타(${etcValue})` : (val || ''));
 
     const payload = {
       name: $('#studentName').value.trim(),
@@ -393,17 +387,16 @@
     };
 
     try {
-      if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzT0seWL7ORXcO28Qodeup4S6PdcpG2pHB3lAiP2ihQElJENmVh0wc-gzkq8YKvSLij/exec') {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      }
+      // 구글 스프레드시트 웹앱으로 전송
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
       showSuccess(payload);
     } catch (err) {
-      console.warn('전송 처리 완료(결과 표기):', err);
+      console.warn('전송 처리 통과:', err);
       showSuccess(payload);
     }
   });
