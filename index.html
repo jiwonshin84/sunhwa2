@@ -43,7 +43,7 @@
     h2 { font-size: 18px; margin-top: 0; color: #1e293b; font-weight: 700; }
     .muted { color: var(--muted); font-size: 13.5px; line-height: 1.5; }
 
-    /* 선택 그리드 */
+    /* 타일 그리드 */
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
     .tile {
       border: 2px solid #e2e8f0;
@@ -65,7 +65,7 @@
     .tile strong { font-size: 14px; font-weight: 700; color: #1e293b; }
     .tile small { font-size: 11px; color: var(--muted); }
 
-    /* 순위 뱃지 */
+    /* 순위 뱃지 (1순위, 2순위, 3순위 / 1지망~4지망) */
     .rank-tag {
       position: absolute;
       top: 8px;
@@ -77,6 +77,10 @@
       padding: 2px 7px;
       border-radius: 99px;
       box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
+    }
+    .rank-tag-school {
+      background: var(--secondary) !important;
+      box-shadow: 0 2px 6px rgba(236, 72, 153, 0.4) !important;
     }
 
     /* 기타 입력 박스 */
@@ -102,13 +106,13 @@
     }
     .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
     
-    /* 010 전화번호 */
+    /* 010 전화번호 분할 입력 */
     .phone-box { display: flex; align-items: center; gap: 8px; }
     .phone-box input { text-align: center; font-weight: 600; }
     .phone-prefix { width: 75px !important; background: #f1f5f9; color: #475569; cursor: not-allowed; user-select: none; }
     .phone-divider { color: var(--muted); font-weight: bold; }
 
-    /* 안내문 */
+    /* 이벤트 안내문 */
     .event-notice {
       background: #f8fafc;
       border: 1px dashed #cbd5e1;
@@ -167,58 +171,93 @@
 
   <!-- 설문 입력 폼 -->
   <div id="surveySection">
-    <!-- STEP 1: 기준 선택 -->
+    
+    <!-- STEP 1: 고교 선택 기준 (3가지 선택) -->
     <section class="card">
       <h2>① 내가 고등학교를 고를 때 제일 중요한 기준은? (3개 선택)</h2>
-      <p class="muted">중요하게 생각하는 순서대로 <b>3가지</b>를 클릭해주세요. (<span id="count" style="color:var(--primary); font-weight:700;">0</span>/3개 선택)</p>
+      <p class="muted">중요하게 생각하는 순서대로 <b>3가지</b>를 클릭해주세요. (<span id="criteriaCount" style="color:var(--primary); font-weight:700;">0</span>/3개 선택)</p>
       
       <div id="criteriaGrid" class="grid">
-        <div class="tile" data-val="내신성적">
+        <div class="tile tile-criteria" data-val="내신성적">
           <span>💯</span>
           <strong>내신 성적 관리</strong>
           <small>대학 입시에 유리한 내신 등급</small>
         </div>
-        <div class="tile" data-val="진로운영">
+        <div class="tile tile-criteria" data-val="진로운영">
           <span>🎯</span>
           <strong>진로 맞춤 프로그램</strong>
           <small>다양한 특색 활동 및 동아리</small>
         </div>
-        <div class="tile" data-val="학습분위기">
+        <div class="tile tile-criteria" data-val="학습분위기">
           <span>📖</span>
           <strong>열정적인 면학 분위기</strong>
           <small>함께 공부하고 자극받는 환경</small>
         </div>
-        <div class="tile" data-val="통학거리">
+        <div class="tile tile-criteria" data-val="통학거리">
           <span>🚌</span>
           <strong>가까운 통학 거리</strong>
           <small>등하교 시간 절약과 체력 안배</small>
         </div>
-        <div class="tile" data-val="시설환경">
+        <div class="tile tile-criteria" data-val="시설환경">
           <span>🏫</span>
           <strong>쾌적한 학교 시설</strong>
           <small>최신 스마트 교실, 급식 맛집</small>
         </div>
-        <div class="tile" data-val="선배교사">
+        <div class="tile tile-criteria" data-val="선배교사">
           <span>💖</span>
           <strong>친절한 선생님과 선배</strong>
           <small>따뜻하고 가족 같은 학교 문화</small>
         </div>
-        <div class="tile" data-val="기타" style="grid-column: span 2;">
+        <div class="tile tile-criteria" data-val="기타" style="grid-column: span 2;">
           <span>✏️</span>
           <strong>기타 (직접 작성)</strong>
           <small>나만의 특별한 선택 기준이 있다면 적어주세요</small>
         </div>
       </div>
 
-      <div id="etcBox" class="etc-input-box hidden">
-        <label for="etcText" style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">✏️ 기타 선택 기준 직접 입력 *</label>
-        <input type="text" id="etcText" placeholder="예: 높은 대학 진학률, 예체능 지원 등">
+      <div id="etcCriteriaBox" class="etc-input-box hidden">
+        <label for="etcCriteriaText" style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">✏️ 기타 선택 기준 직접 입력 *</label>
+        <input type="text" id="etcCriteriaText" placeholder="예: 높은 대학 진학률, 예체능 지원 등">
       </div>
     </section>
 
-    <!-- STEP 2: 정보 입력 -->
+    <!-- STEP 2: 고등학교 지망 순위 (4개 모두 순서대로 선택) -->
     <section class="card">
-      <h2>② 럭키 이벤트 추첨 & 맞춤 결과 전송 🎁</h2>
+      <h2>② 내가 생각 중인 고등학교 지망 순위는? (1~4지망 순서대로)</h2>
+      <p class="muted">가장 가고 싶은 학교부터 <b>순서대로 4가지</b>를 모두 클릭해주세요. (<span id="schoolCount" style="color:var(--secondary); font-weight:700;">0</span>/4개 선택)</p>
+      
+      <div id="schoolGrid" class="grid">
+        <div class="tile tile-school" data-val="선화여고">
+          <span>🌸</span>
+          <strong>선화여자고등학교</strong>
+          <small>동국대사대부속 선화여고</small>
+        </div>
+        <div class="tile tile-school" data-val="영천여고">
+          <span>🏫</span>
+          <strong>영천여자고등학교</strong>
+          <small>공립 일반계 여자고등학교</small>
+        </div>
+        <div class="tile tile-school" data-val="성남여고">
+          <span>🌿</span>
+          <strong>성남여자고등학교</strong>
+          <small>사립 일반계 여자고등학교</small>
+        </div>
+        <div class="tile tile-school" data-val="기타">
+          <span>✏️</span>
+          <strong>기타 고등학교</strong>
+          <small>타 지역 고교 또는 특성화고</small>
+        </div>
+      </div>
+
+      <div id="etcSchoolBox" class="etc-input-box hidden" style="border-color: var(--secondary);">
+        <label for="etcSchoolText" style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">✏️ 기타 고등학교 이름 직접 입력 *</label>
+        <input type="text" id="etcSchoolText" placeholder="예: 영천고, 포항제철고, 경북기계명장고 등">
+      </div>
+    </section>
+
+    <!-- STEP 3: 학생 정보 입력 -->
+    <section class="card">
+      <h2>③ 럭키 이벤트 추첨 & 맞춤 결과 전송 🎁</h2>
       <p class="muted">선화여고 인스타그램 이벤트 추첨 및 맞춤 고교 진학 꿀팁 전송을 위해 아래 항목을 작성해주세요.</p>
 
       <div class="form-group">
@@ -293,16 +332,16 @@
   'use strict';
   const $ = s => document.querySelector(s);
 
-  // 구글 스프레드시트 Apps Script 배포 URL
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrF5MotcTb1nAP5H38QD3FxKevFbqYYFtsxZimsaiiphAG6qd1NK5IyHZl6WlgeAhp/exec';
+  // 제공해주신 Google Apps Script 웹 앱 배포 URL 반영
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNgbwRkYtk9sBbsraHotgnUvVOrlgEULZysXUmZ7UI6oiM0BXiDjER_5TamxMIH8-7/exec';
 
-  let selectedCriteria = [];
+  let selectedCriteria = []; // 고교 선택 기준 (3개)
+  let selectedSchools = [];  // 고교 지망 순위 (4개)
 
-  // 카드 선택 핸들러
-  document.querySelectorAll('.tile').forEach(tile => {
+  // 1. 선택 기준 클릭 핸들러 (최대 3개)
+  document.querySelectorAll('.tile-criteria').forEach(tile => {
     tile.addEventListener('click', () => {
       const val = tile.dataset.val;
-
       if (selectedCriteria.includes(val)) {
         selectedCriteria = selectedCriteria.filter(x => x !== val);
       } else {
@@ -312,22 +351,20 @@
         }
         selectedCriteria.push(val);
       }
-
-      updateTilesUI();
+      updateCriteriaUI();
     });
   });
 
-  function updateTilesUI() {
-    document.querySelectorAll('.tile').forEach(t => {
+  function updateCriteriaUI() {
+    document.querySelectorAll('.tile-criteria').forEach(t => {
       const val = t.dataset.val;
       const idx = selectedCriteria.indexOf(val);
       const existingTag = t.querySelector('.rank-tag');
 
       if (idx !== -1) {
         t.classList.add('selected');
-        if (existingTag) {
-          existingTag.textContent = `${idx + 1}순위`;
-        } else {
+        if (existingTag) existingTag.textContent = `${idx + 1}순위`;
+        else {
           const tag = document.createElement('span');
           tag.className = 'rank-tag';
           tag.textContent = `${idx + 1}순위`;
@@ -340,10 +377,55 @@
     });
 
     const hasEtc = selectedCriteria.includes('기타');
-    $('#etcBox').classList.toggle('hidden', !hasEtc);
-    if (!hasEtc) $('#etcText').value = '';
+    $('#etcCriteriaBox').classList.toggle('hidden', !hasEtc);
+    if (!hasEtc) $('#etcCriteriaText').value = '';
 
-    $('#count').textContent = selectedCriteria.length;
+    $('#criteriaCount').textContent = selectedCriteria.length;
+  }
+
+  // 2. 고교 지망 순위 클릭 핸들러 (최대 4개)
+  document.querySelectorAll('.tile-school').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const val = tile.dataset.val;
+      if (selectedSchools.includes(val)) {
+        selectedSchools = selectedSchools.filter(x => x !== val);
+      } else {
+        if (selectedSchools.length >= 4) {
+          alert('고등학교 지망 순위는 1~4지망까지 4가지를 모두 선택해주세요!');
+          return;
+        }
+        selectedSchools.push(val);
+      }
+      updateSchoolUI();
+    });
+  });
+
+  function updateSchoolUI() {
+    document.querySelectorAll('.tile-school').forEach(t => {
+      const val = t.dataset.val;
+      const idx = selectedSchools.indexOf(val);
+      const existingTag = t.querySelector('.rank-tag');
+
+      if (idx !== -1) {
+        t.classList.add('selected');
+        if (existingTag) existingTag.textContent = `${idx + 1}지망`;
+        else {
+          const tag = document.createElement('span');
+          tag.className = 'rank-tag rank-tag-school';
+          tag.textContent = `${idx + 1}지망`;
+          t.append(tag);
+        }
+      } else {
+        t.classList.remove('selected');
+        if (existingTag) existingTag.remove();
+      }
+    });
+
+    const hasEtc = selectedSchools.includes('기타');
+    $('#etcSchoolBox').classList.toggle('hidden', !hasEtc);
+    if (!hasEtc) $('#etcSchoolText').value = '';
+
+    $('#schoolCount').textContent = selectedSchools.length;
   }
 
   // 전화번호 4자리 자동 포커스
@@ -359,7 +441,7 @@
     });
   });
 
-  // 유효성 검사 및 오류 안내 함수
+  // 유효성 검사 및 안내 메시지
   function validateForm() {
     if (selectedCriteria.length < 3) {
       alert(`고등학교 선택 기준을 3가지 순서대로 골라주세요! (현재 ${selectedCriteria.length}개 선택됨)`);
@@ -367,9 +449,21 @@
       return false;
     }
 
-    if (selectedCriteria.includes('기타') && !$('#etcText').value.trim()) {
+    if (selectedCriteria.includes('기타') && !$('#etcCriteriaText').value.trim()) {
       alert('기타 선택 기준 내용을 직접 입력해주세요!');
-      $('#etcText').focus();
+      $('#etcCriteriaText').focus();
+      return false;
+    }
+
+    if (selectedSchools.length < 4) {
+      alert(`고등학교 지망 순위를 1지망부터 4지망까지 모두 선택해주세요! (현재 ${selectedSchools.length}개 선택됨)`);
+      window.scrollTo({ top: $('#schoolGrid').offsetTop - 60, behavior: 'smooth' });
+      return false;
+    }
+
+    if (selectedSchools.includes('기타') && !$('#etcSchoolText').value.trim()) {
+      alert('기타 고등학교 이름을 직접 입력해주세요!');
+      $('#etcSchoolText').focus();
       return false;
     }
 
@@ -380,7 +474,7 @@
     }
 
     if (phoneMid.value.length !== 4 || phoneEnd.value.length !== 4) {
-      alert('휴대폰 번호 가운데/끝 4자리를 정확히 입력해주세요!');
+      alert('휴대폰 번호 가운데와 끝 4자리를 정확히 입력해주세요!');
       if (phoneMid.value.length !== 4) phoneMid.focus();
       else phoneEnd.focus();
       return false;
@@ -403,7 +497,6 @@
 
   // 폼 전송 핸들러
   $('#submitBtn').addEventListener('click', async () => {
-    // 1. 유효성 검사 실행 (누락 시 알림 표시 후 중단)
     if (!validateForm()) return;
 
     const btn = $('#submitBtn');
@@ -411,17 +504,27 @@
     btn.textContent = '티켓 발급 및 데이터 전송 중... ⏳';
 
     const fullPhone = `010-${phoneMid.value.trim()}-${phoneEnd.value.trim()}`;
-    const etcValue = $('#etcText').value.trim();
-    const formatChoice = (val) => (val === '기타' ? `기타(${etcValue})` : (val || ''));
+    
+    // 선택 기준 치환
+    const etcCriteriaVal = $('#etcCriteriaText').value.trim();
+    const formatCriteria = (val) => (val === '기타' ? `기타(${etcCriteriaVal})` : (val || ''));
+
+    // 고교 지망 치환
+    const etcSchoolVal = $('#etcSchoolText').value.trim();
+    const formatSchool = (val) => (val === '기타' ? `기타(${etcSchoolVal})` : (val || ''));
 
     const payload = {
       name: $('#studentName').value.trim(),
       phone: fullPhone,
       school: $('#studentSchool').value.trim(),
       instagram: $('#studentInsta').value.trim(),
-      choice1: formatChoice(selectedCriteria[0]),
-      choice2: formatChoice(selectedCriteria[1]),
-      choice3: formatChoice(selectedCriteria[2]),
+      choice1: formatCriteria(selectedCriteria[0]),
+      choice2: formatCriteria(selectedCriteria[1]),
+      choice3: formatCriteria(selectedCriteria[2]),
+      schoolChoice1: formatSchool(selectedSchools[0]),
+      schoolChoice2: formatSchool(selectedSchools[1]),
+      schoolChoice3: formatSchool(selectedSchools[2]),
+      schoolChoice4: formatSchool(selectedSchools[3]),
       memo: $('#studentMemo').value.trim()
     };
 
@@ -434,7 +537,7 @@
       });
       showSuccess(payload);
     } catch (err) {
-      console.warn('전송 처리 통과:', err);
+      console.warn('전송 통과:', err);
       showSuccess(payload);
     } finally {
       btn.disabled = false;
@@ -446,27 +549,23 @@
     $('#surveySection').classList.add('hidden');
     $('#resultSection').classList.remove('hidden');
 
-    let comment = `<b>${data.name}</b>님이 선택해주신<br><b>1순위 [${data.choice1}]</b>, <b>2순위 [${data.choice2}]</b>, <b>3순위 [${data.choice3}]</b> 기준은 선화여고가 가장 자신 있는 부분이에요!`;
+    let comment = `<b>${data.name}</b>님의 1지망 고등학교는 <b>[${data.schoolChoice1}]</b>이군요!<br>`;
+    comment += `선택해주신 <b>1순위 [${data.choice1}]</b>, <b>2순위 [${data.choice2}]</b>, <b>3순위 [${data.choice3}]</b> 기준은 선화여고가 가장 자신 있게 지원하는 부분이에요!`;
     
-    const allChoices = [data.choice1, data.choice2, data.choice3].join(' ');
-    if (allChoices.includes('내신성적')) {
-      comment += `<br>• <b>내신 & 진학:</b> 학생 중심 진학 설계 프로그램으로 수시 학생부종합전형에서 매년 뛰어난 입시 성과를 내고 있어요.`;
-    }
-    if (allChoices.includes('진로운영')) {
-      comment += `<br>• <b>진로 프로그램:</b> AI, SW, 바이오, 미디어 등 30개 이상의 특색 진로 동아리와 맞춤형 융합 수업이 개설되어 있어요.`;
-    }
-    if (allChoices.includes('선배교사')) {
-      comment += `<br>• <b>학교 문화:</b> 선후배 멘토링 프로그램과 열정 가득한 선생님들이 여러분의 꿈을 1:1로 밀착 응원합니다.`;
+    if (data.schoolChoice1.indexOf('선화여고') !== -1) {
+      comment += `<br><br>🌸 <b>선화여고를 1지망으로 선택해주셔서 감사해요!</b> 학생 여러분의 꿈을 펼칠 수 있는 최고의 고교 생활을 약속할게요!`;
     }
 
     $('#matchSummary').innerHTML = comment;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 새로 작성하기 (초기화) 핸들러
+  // 새로 작성하기 (초기화)
   $('#restartBtn').addEventListener('click', () => {
     selectedCriteria = [];
-    updateTilesUI();
+    selectedSchools = [];
+    updateCriteriaUI();
+    updateSchoolUI();
 
     $('#studentName').value = '';
     phoneMid.value = '';
@@ -474,7 +573,8 @@
     $('#studentSchool').value = '';
     $('#studentInsta').value = '';
     $('#studentMemo').value = '';
-    $('#etcText').value = '';
+    $('#etcCriteriaText').value = '';
+    $('#etcSchoolText').value = '';
 
     $('#resultSection').classList.add('hidden');
     $('#surveySection').classList.remove('hidden');
